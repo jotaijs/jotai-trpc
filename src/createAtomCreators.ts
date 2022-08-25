@@ -29,6 +29,7 @@ export function createAtomCreators<TRouter extends AnyRouter>(
   };
 
   return {
+    client,
     atomWithQuery,
     // TODO atomWithMutation,
   };
