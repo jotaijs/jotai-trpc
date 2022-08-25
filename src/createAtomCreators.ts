@@ -1,4 +1,5 @@
-import { CreateTRPCClientOptions, createTRPCClient } from '@trpc/client';
+import { createTRPCClient } from '@trpc/client';
+import type { CreateTRPCClientOptions } from '@trpc/client';
 import type { AnyRouter } from '@trpc/server';
 
 import { atom } from 'jotai';
@@ -14,10 +15,14 @@ export function createAtomCreators<TRouter extends AnyRouter>(
 
   type Args = Parameters<typeof client.query>;
 
-  const atomWithQuery = (getArgs: Args | ((get: Getter) => Args)) => {
+  const atomWithQuery = (
+    getArgs: Args | ((get: Getter) => Args),
+    getClient?: (get: Getter) => typeof client,
+  ) => {
     const queryAtom = atom(async (get) => {
       const args = isGetter(getArgs) ? getArgs(get) : getArgs;
-      const result = await client.query(...args);
+      const currentClient = getClient ? getClient(get) : client;
+      const result = await currentClient.query(...args);
       return result;
     });
     return queryAtom;
