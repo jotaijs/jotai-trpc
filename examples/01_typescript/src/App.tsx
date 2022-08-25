@@ -2,7 +2,7 @@ import React, { Suspense, useState } from 'react';
 import { atom, useAtom } from 'jotai';
 import { createAtomCreators } from 'jotai-trpc';
 
-import { AppRouter } from './server';
+import type { AppRouter } from './server';
 
 const { atomWithQuery } = createAtomCreators<AppRouter>({
   url: 'http://localhost:4000/trpc',
