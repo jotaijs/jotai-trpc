@@ -16,9 +16,7 @@ export function createAtomCreators<TRouter extends AnyRouter>(
   const client = createTRPCClient<TRouter>(opts);
 
   type TQueries = TRouter['_def']['queries'];
-  const atomWithQuery = <
-    TPath extends keyof TQueries & string,
-  >(
+  const atomWithQuery = <TPath extends keyof TQueries & string>(
     getArgs: ArgsOrGetter<
       [
         path: TPath,
