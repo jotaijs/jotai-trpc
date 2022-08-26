@@ -17,18 +17,16 @@ export function createAtomCreators<TRouter extends AnyRouter>(
 
   type TQueries = TRouter['_def']['queries'];
   const atomWithQuery = <TPath extends keyof TQueries & string>(
+    path: TPath,
     getArgs: ArgsOrGetter<
-      [
-        path: TPath,
-        ...args: [...inferHandlerInput<TQueries[TPath]>, TRPCRequestOptions?],
-      ]
+      [...inferHandlerInput<TQueries[TPath]>, TRPCRequestOptions?]
     >,
     getClient?: (get: Getter) => typeof client,
   ) => {
     const queryAtom = atom(async (get) => {
       const args = isGetter(getArgs) ? getArgs(get) : getArgs;
       const currentClient = getClient ? getClient(get) : client;
-      const result = await currentClient.query(...args);
+      const result = await currentClient.query(path, ...args);
       return result;
     });
     return queryAtom;

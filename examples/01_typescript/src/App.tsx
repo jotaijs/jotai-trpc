@@ -10,7 +10,7 @@ const { atomWithQuery } = createAtomCreators<AppRouter>({
 
 const nameAtom = atom('name');
 
-const greetAtom = atomWithQuery((get) => ['greet', get(nameAtom)]);
+const greetAtom = atomWithQuery('greet', (get) => [get(nameAtom)]);
 
 const Greet = () => {
   const [data] = useAtom(greetAtom);
