@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@trpc/client": "latest",
+    "@trpc/server": "latest",
     "@types/react": "latest",
     "jotai": "latest",
     "jotai-trpc": "latest",
