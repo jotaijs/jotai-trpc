@@ -23,7 +23,6 @@ const NAMES = [
 const nameAtom = atom(NAMES[0]);
 
 const pokemonAtom = atomWithQuery('pokemon.byId', (get) => [get(nameAtom)]);
-// FIXME ^ the type is not inferred. maybe due to v9 and v10 incompatibility?
 
 const Pokemon = () => {
   const [data] = useAtom(pokemonAtom);

@@ -974,7 +974,7 @@
     core-js-pure "^3.20.2"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.10.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.18.9", "@babel/runtime@^7.8.4":
+"@babel/runtime@^7.10.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.18.9", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.0":
   version "7.18.9"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.18.9.tgz#b4fcfce55db3d2e5e080d2490f608a3b9f407f4a"
   integrity sha512-lkqXDcvlFT5rvEjiu6+QYO+1GXrEHRo2LOtS7E4GtX5ESIZOgepqsZBVIj6Pv+a6zqsya9VCgiK1KAK4BvJDAw==
@@ -1466,15 +1466,17 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
-"@trpc/client@^10.0.0-proxy-alpha.59":
-  version "10.0.0-proxy-alpha.59"
-  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.0.0-proxy-alpha.59.tgz#8a29c5ddb89be93de8daa27376183c4d82f56d9c"
-  integrity sha512-0+iJE8Z98FmnLYthg2SJRsLrVbwEZPdohVJBEsC0goja2C8bNfWMWDfNL5FJeYBEcycRUg+eNByaLNLW52MEZg==
+"@trpc/client@^9.27.2":
+  version "9.27.2"
+  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-9.27.2.tgz#1b4ae3c12c5666e81322fddd787d48b0901b75a1"
+  integrity sha512-rpsgJJMalOtki5VjcyheL0zdft23mDnoBHn5cJMZLf3ssymCZq2crbvCiUmCRU289lYHrqffaaZ+9PqCSsVKfg==
+  dependencies:
+    "@babel/runtime" "^7.9.0"
 
-"@trpc/server@^10.0.0-proxy-alpha.59":
-  version "10.0.0-proxy-alpha.59"
-  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.0.0-proxy-alpha.59.tgz#015711e90281b8f548da4946a5fabb9ff6d4e5c2"
-  integrity sha512-rp7FIcT9KaZpqjymFXpakZRq/jshOKsLcaOM/UgaXgcec8/rMcu2V19/Stf2yYSxC5qQKihaLozAAitw6Ftt9g==
+"@trpc/server@^9.27.2":
+  version "9.27.2"
+  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-9.27.2.tgz#4600a471677fc0f0560b73f32e0fc7f199146531"
+  integrity sha512-LcXCC004SYWVdHqjSZVpoKkcM0tJNwWtvmjmE2Jir36F0siY1CCbr7g2vz6LcOtA/q7Jj5G2/x1qMWzlPq/Bwg==
 
 "@trysound/sax@0.2.0":
   version "0.2.0"
@@ -7210,10 +7212,10 @@ tr46@^3.0.0:
   dependencies:
     punycode "^2.1.1"
 
-trpc-pokemon@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/trpc-pokemon/-/trpc-pokemon-1.0.2.tgz#d8a0de340b7c27ce697a82ae820be860ea47f474"
-  integrity sha512-U0kmN0aVhzjzAE8byIKKYo4Ty/Jza1EFVEGDx36XTO24AyGEbGRtZrmdeCf/VjbE29Z0bK5T8yTm6dVrSqOe+g==
+trpc-pokemon@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/trpc-pokemon/-/trpc-pokemon-1.0.3.tgz#92534f12634138aabecafdd2b7133056c73be9c9"
+  integrity sha512-UWnzcKAu9imT3o3wpj8yXMZo0E05+E0fpKiRIMcKleIejtiBR5KajFi5/VrJ9WTTXxv2f31b+EMSRQ1PH41Frg==
 
 ts-jest@^28.0.8:
   version "28.0.8"
