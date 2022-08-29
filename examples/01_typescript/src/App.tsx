@@ -1,34 +1,55 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 import { atom, useAtom } from 'jotai';
 import { createAtomCreators } from 'jotai-trpc';
+import { trpcPokemonUrl } from 'trpc-pokemon';
+import type { PokemonRouter } from 'trpc-pokemon';
 
-import type { AppRouter } from './server';
-
-const { atomWithQuery } = createAtomCreators<AppRouter>({
-  url: 'http://localhost:4000/trpc',
+const { atomWithQuery } = createAtomCreators<PokemonRouter>({
+  url: trpcPokemonUrl,
 });
 
-const nameAtom = atom('name');
+const NAMES = [
+  'bulbasaur',
+  'ivysaur',
+  'venusaur',
+  'charmander',
+  'charmeleon',
+  'charizard',
+  'squirtle',
+  'wartortle',
+  'blastoise',
+];
 
-const greetAtom = atomWithQuery('greet', (get) => [get(nameAtom)]);
+const nameAtom = atom(NAMES[0]);
 
-const Greet = () => {
-  const [data] = useAtom(greetAtom);
-  return <p>{data.message}</p>;
+const pokemonAtom = atomWithQuery('pokemon.byId', (get) => [get(nameAtom)]);
+// FIXME ^ the type is not inferred. maybe due to v9 and v10 incompatibility?
+
+const Pokemon = () => {
+  const [data] = useAtom(pokemonAtom);
+  return (
+    <div>
+      <div>ID: {data.id}</div>
+      <div>Height: {data.height}</div>
+      <div>Weight: {data.weight}</div>
+    </div>
+  );
 };
 
 const App = () => {
   const [name, setName] = useAtom(nameAtom);
-  const [text, setText] = useState(name);
   return (
     <div>
-      <input value={text} onChange={(e) => setText(e.target.value)} />
-      <button type="button" onClick={() => setName(text)}>
-        Fetch
-      </button>
+      <select value={name} onChange={(e) => setName(e.target.value)}>
+        {NAMES.map((n) => (
+          <option key={n} value={n}>
+            {n}
+          </option>
+        ))}
+      </select>
       <hr />
       <Suspense fallback="Loading...">
-        <Greet />
+        <Pokemon />
       </Suspense>
     </div>
   );

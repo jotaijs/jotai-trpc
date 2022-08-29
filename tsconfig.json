@@ -16,10 +16,5 @@
       "jotai-trpc": ["./src"]
     },
     "outDir": "./dist"
-  },
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
   }
 }
