@@ -11,6 +11,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-scripts": "latest",
+    "trpc-pokemon": "latest",
     "typescript": "latest"
   },
   "scripts": {
