@@ -6,6 +6,7 @@
     "@trpc/client": "latest",
     "@trpc/server": "latest",
     "@types/react": "latest",
+    "@types/react-dom": "latest",
     "jotai": "latest",
     "jotai-trpc": "latest",
     "react": "latest",
