@@ -11,6 +11,7 @@
     "jotai-trpc": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "react-error-boundary": "latest",
     "react-scripts": "latest",
     "trpc-pokemon": "latest",
     "typescript": "latest"
