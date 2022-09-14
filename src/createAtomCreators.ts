@@ -28,7 +28,11 @@ export function createAtomCreators<TRouter extends AnyRouter>(
       const input = isGetter(getInput) ? getInput(get) : getInput;
       const options = isGetter(getOptions) ? getOptions(get) : getOptions;
       const currentClient = getClient ? getClient(get) : client;
-      const result = await currentClient.query(path, ...input, options);
+      const result = await currentClient.query(
+        path,
+        ...input,
+        options as TRPCRequestOptions,
+      );
       return result;
     });
     return queryAtom;

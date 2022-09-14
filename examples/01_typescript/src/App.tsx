@@ -20,7 +20,7 @@ const NAMES = [
   'blastoise',
 ];
 
-const nameAtom = atom(NAMES[0]);
+const nameAtom = atom(NAMES[0] as string);
 
 const pokemonAtom = atomWithQuery('pokemon.byId', (get) => [get(nameAtom)]);
 
