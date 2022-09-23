@@ -38,9 +38,36 @@ export function createAtomCreators<TRouter extends AnyRouter>(
     return queryAtom;
   };
 
+  type TMutations = TRouter['_def']['mutations'];
+  const atomWithMutation = <TPath extends keyof TMutations & string>(
+    path: TPath,
+    getClient?: (get: Getter) => typeof client,
+  ) => {
+    type Result = Awaited<ReturnType<TMutations[TPath]['call']>>;
+    const mutationAtom = atom(
+      null as Result | null,
+      async (
+        get,
+        set,
+        args: [...inferHandlerInput<TMutations[TPath]>, TRPCRequestOptions?],
+      ) => {
+        const currentClient = getClient ? getClient(get) : client;
+        const result = await currentClient.mutation(
+          path,
+          ...(args as [
+            ...inferHandlerInput<TMutations[TPath]>,
+            TRPCRequestOptions,
+          ]),
+        );
+        set(mutationAtom, result as any);
+      },
+    );
+    return mutationAtom;
+  };
+
   return {
     client,
     atomWithQuery,
-    // TODO atomWithMutation,
+    atomWithMutation,
   };
 }
