@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { atom, useAtom } from 'jotai';
-import { createTRPCClient } from '@trpc/client';
+import { createTRPCClient, httpLink } from '@trpc/client';
 import { createAtomCreators } from 'jotai-trpc';
 import { trpcPokemonUrl } from 'trpc-pokemon';
 import type { PokemonRouter } from 'trpc-pokemon';
@@ -8,17 +8,25 @@ import { ErrorBoundary } from 'react-error-boundary';
 import type { FallbackProps } from 'react-error-boundary';
 
 const { atomWithQuery } = createAtomCreators<PokemonRouter>({
-  url: trpcPokemonUrl,
+  links: [
+    httpLink({
+      url: trpcPokemonUrl,
+    }),
+  ],
 });
 
 const tokenAtom = atom('');
 
 const clientAtom = atom((get) =>
   createTRPCClient<PokemonRouter>({
-    url: get(tokenAtom) ? trpcPokemonUrl : 'Invalid URL',
-    headers: {
-      Authorization: `Bearer ${get(tokenAtom)}`,
-    },
+    links: [
+      httpLink({
+        url: get(tokenAtom) ? trpcPokemonUrl : 'Invalid URL',
+        headers: {
+          Authorization: `Bearer ${get(tokenAtom)}`,
+        },
+      }),
+    ],
   }),
 );
 

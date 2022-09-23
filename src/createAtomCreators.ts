@@ -1,5 +1,3 @@
-// This is for tRPC v9.
-// We are waiting for a new primitive API for v10.
 import { createTRPCClient, TRPCRequestOptions } from '@trpc/client';
 import type { CreateTRPCClientOptions } from '@trpc/client';
 import type { AnyRouter, inferHandlerInput } from '@trpc/server';

@@ -47,8 +47,8 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "@trpc/client": "^9.27.2",
-    "@trpc/server": "^9.27.2",
+    "@trpc/client": "^10.0.0-proxy-beta.5",
+    "@trpc/server": "^10.0.0-proxy-beta.5",
     "@types/jest": "^28.1.8",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
