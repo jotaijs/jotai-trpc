@@ -25,7 +25,7 @@ type ProcedureRouterRecordPaths<
   TKey extends keyof TProdecures = keyof TProdecures,
 > = TKey extends string
   ? TProdecures[TKey] extends AnyRouter
-    ? `${TKey}.${ProcedureRouterRecordPaths<
+    ? `${TKey}${ProcedureRouterRecordPaths<
         TProdecures[TKey]['_def']['record']
       >}`
     : TKey
@@ -36,7 +36,7 @@ type GetProdecure<
   TPath extends string,
 > = {
   [TKey in keyof TProcedures]: TProcedures[TKey] extends AnyRouter
-    ? TPath extends `${TKey & string}.${infer TPathRest}`
+    ? TPath extends `${TKey & string}${infer TPathRest}`
       ? GetProdecure<TProcedures[TKey]['_def']['record'], TPathRest>
       : never
     : TProcedures[TPath] extends AnyProcedure
