@@ -100,11 +100,11 @@ export function createAtomCreators<TRouter extends AnyRouter>(
                   onNext: arg.next.bind(arg),
                   onError: arg.error.bind(arg),
                 };
-          const unsubscribe = currentClient.subscription(path, input, {
+          const unsubscribable = currentClient.subscription(path, input, {
             ...options,
             ...callbacks,
           });
-          return { unsubscribe };
+          return unsubscribable;
         },
       };
       return observable;
