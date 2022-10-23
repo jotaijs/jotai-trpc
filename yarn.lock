@@ -1471,15 +1471,15 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
-"@trpc/client@^10.0.0-proxy-beta.5":
-  version "10.0.0-proxy-beta.5"
-  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.0.0-proxy-beta.5.tgz#26240fac4bfd07d75172c39e5abc033ed3ee5f4e"
-  integrity sha512-7JOP9qjPA+9QwLQF6SS/MgJzOnQb17WxoemeQqSjJxCcBYt4GU00LD4qAPChGw7fvCM2PfgrY1VKDn05tbsTxg==
+"@trpc/client@^10.0.0-proxy-beta.25":
+  version "10.0.0-proxy-beta.25"
+  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.0.0-proxy-beta.25.tgz#2aa8834a619fc1cda540e167628001448b944d7a"
+  integrity sha512-Q+B4w0P0yEAJPkavBNWMs4jSrFfc+TbpdB9UpDyJRVhYbkRV9Ly3yNu9H5TglzyOqQHHCBtBVRMKmoZYCrLZow==
 
-"@trpc/server@^10.0.0-proxy-beta.5":
-  version "10.0.0-proxy-beta.5"
-  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.0.0-proxy-beta.5.tgz#7efd0cafd7bae0031c88150cc74f70e870f58318"
-  integrity sha512-0bF+qpnzK1/qXI021C5CPTnpkJY4Q2tRj0Tvb9M8iHxkVQaRn84AaNNO45uz5BrCq7GkaWQ4DOUtB29GsRMzBw==
+"@trpc/server@^10.0.0-proxy-beta.25":
+  version "10.0.0-proxy-beta.25"
+  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.0.0-proxy-beta.25.tgz#a8a7579d9061afade628e22a104c75cdeda95921"
+  integrity sha512-OkLiaPrEg2R1+RRuqxE98mSsbcpu39j4Uh6mIPPeSDJn6v0nC0bsT3uJeL2F8R7EAptpT/w7OZGZDeDN56c2AQ==
 
 "@trysound/sax@0.2.0":
   version "0.2.0"
@@ -4971,10 +4971,10 @@ jest@^29.0.1:
     import-local "^3.0.2"
     jest-cli "^29.0.1"
 
-jotai@^1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.8.1.tgz#aa59c5c7c55a7b4392db1ebedd0f5dd076ee30ae"
-  integrity sha512-ZhZ15z+94E95aMYpH9MfwFFYP5m8TuFKkEN/6+3P4SC3dXnQc5s+DbMl+kA4RC63OcUlfi9C0nJU3YDnJfqLIg==
+jotai@^1.8.6:
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.8.6.tgz#4112f619c0153db9fc04025b871ab02a6800cfe1"
+  integrity sha512-6JXNd2ewR6Ur0hGY0kRJebQ++p7lN/8kNdGNXv7XT11FDPxAtPN2XLM+m0w4bV22f1knQlG8ZpVLfY6BEGF+UQ==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
