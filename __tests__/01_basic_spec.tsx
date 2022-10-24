@@ -1,7 +1,7 @@
-import { createAtomCreators } from '../src/index';
+import { createTRPCJotai } from '../src/index';
 
 describe('basic spec', () => {
   it('should export functions', () => {
-    expect(createAtomCreators).toBeDefined();
+    expect(createTRPCJotai).toBeDefined();
   });
 });

@@ -1,1 +1,1 @@
-export { createAtomCreators } from './createAtomCreators';
+export { createTRPCJotai } from './createTRPCJotai';
