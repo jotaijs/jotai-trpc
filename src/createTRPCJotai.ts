@@ -8,10 +8,10 @@ import type {
   AnyRouter,
   ProcedureArgs,
   ProcedureRouterRecord,
-  inferObservableValue,
   inferProcedureInput,
   inferProcedureOutput,
 } from '@trpc/server';
+import type { inferObservableValue } from '@trpc/server/observable';
 
 import { atom } from 'jotai';
 import { atomWithObservable } from 'jotai/utils';
