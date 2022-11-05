@@ -1,13 +1,13 @@
 import React, { Suspense } from 'react';
 import { atom, useAtom } from 'jotai';
-import { createTRPCClient, httpLink } from '@trpc/client';
-import { createAtomCreators } from 'jotai-trpc';
+import { createTRPCProxyClient, httpLink } from '@trpc/client';
+import { createTRPCJotai } from 'jotai-trpc';
 import { trpcPokemonUrl } from 'trpc-pokemon';
 import type { PokemonRouter } from 'trpc-pokemon';
 import { ErrorBoundary } from 'react-error-boundary';
 import type { FallbackProps } from 'react-error-boundary';
 
-const { atomWithQuery } = createAtomCreators<PokemonRouter>({
+const trpc = createTRPCJotai<PokemonRouter>({
   links: [
     httpLink({
       url: trpcPokemonUrl,
@@ -18,7 +18,7 @@ const { atomWithQuery } = createAtomCreators<PokemonRouter>({
 const tokenAtom = atom('');
 
 const clientAtom = atom((get) =>
-  createTRPCClient<PokemonRouter>({
+  createTRPCProxyClient<PokemonRouter>({
     links: [
       httpLink({
         url: get(tokenAtom) ? trpcPokemonUrl : 'Invalid URL',
@@ -30,8 +30,10 @@ const clientAtom = atom((get) =>
   }),
 );
 
-const pokemonAtom = atomWithQuery('pokemon.all', [], undefined, (get) =>
-  get(clientAtom),
+const pokemonAtom = trpc.pokemon.all.atomWithQuery(
+  undefined,
+  undefined,
+  (get) => get(clientAtom).pokemon.all as any, // FIXME avoid any
 );
 
 const Pokemon = () => {

@@ -87,7 +87,7 @@ const atomWithSubscription = <TProcedure extends AnySubscriptionProcedure>(
 
 type QueryResolver<TProcedure extends AnyProcedure> = (
   getInput: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[0]>,
-  getOptions: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
+  getOptions?: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
   getProcedure?: (get: Getter) => TProcedure,
 ) => Atom<Promise<inferProcedureOutput<TProcedure>>>;
 
@@ -100,7 +100,7 @@ type MutationResolver<TProcedure extends AnyProcedure> = (
 
 type SubscriptionResolver<TProcedure extends AnyProcedure> = (
   getInput: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[0]>,
-  getOptions: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
+  getOptions?: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
   getProcedure?: (get: Getter) => TProcedure,
 ) => Atom<inferObservableValue<inferProcedureOutput<TProcedure>>>;
 
@@ -132,30 +132,32 @@ export function createTRPCJotai<TRouter extends AnyRouter>(
 ) {
   const client = createTRPCProxyClient<TRouter>(opts);
 
-  const createProxy = (target: any, parentProp?: string): any => {
+  const createProxy = (target: any, parent?: any, parentProp?: string): any => {
     return new Proxy(
-      {},
+      () => {
+        // empty
+      },
       {
         get(_target, prop: string) {
-          return createProxy(target[prop], prop);
+          return createProxy(target[prop], target, prop);
         },
         apply(_target, _thisArg, args) {
           if (parentProp === 'atomWithQuery') {
             const [getInput, getOptions, getProcedure] = args;
             return atomWithQuery(
-              getProcedure || (() => target),
+              getProcedure || (() => parent),
               getInput,
               getOptions,
             );
           }
           if (parentProp === 'atomWithMutation') {
             const [getProcedure] = args;
-            return atomWithMutation(getProcedure || (() => target));
+            return atomWithMutation(getProcedure || (() => parent));
           }
           if (parentProp === 'atomWithSubscription') {
             const [getInput, getOptions, getProcedure] = args;
             return atomWithSubscription(
-              getProcedure || (() => target),
+              getProcedure || (() => parent),
               getInput,
               getOptions,
             );

@@ -1471,15 +1471,15 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
-"@trpc/client@^10.0.0-proxy-beta.25":
-  version "10.0.0-proxy-beta.25"
-  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.0.0-proxy-beta.25.tgz#2aa8834a619fc1cda540e167628001448b944d7a"
-  integrity sha512-Q+B4w0P0yEAJPkavBNWMs4jSrFfc+TbpdB9UpDyJRVhYbkRV9Ly3yNu9H5TglzyOqQHHCBtBVRMKmoZYCrLZow==
+"@trpc/client@^10.0.0-proxy-beta.26":
+  version "10.0.0-proxy-beta.26"
+  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.0.0-proxy-beta.26.tgz#b8df0b7e5c75bef5021e7813da7c0f1df0a93d27"
+  integrity sha512-NTAqTtMCsB5DneoseK/oFYA9YkcIXHuYp1zojnhNpNA+HFzFvkDUHsKNmaPwd5c/KxLr7nP/jQvRzvVuZbgBng==
 
-"@trpc/server@^10.0.0-proxy-beta.25":
-  version "10.0.0-proxy-beta.25"
-  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.0.0-proxy-beta.25.tgz#a8a7579d9061afade628e22a104c75cdeda95921"
-  integrity sha512-OkLiaPrEg2R1+RRuqxE98mSsbcpu39j4Uh6mIPPeSDJn6v0nC0bsT3uJeL2F8R7EAptpT/w7OZGZDeDN56c2AQ==
+"@trpc/server@^10.0.0-proxy-beta.26":
+  version "10.0.0-proxy-beta.26"
+  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.0.0-proxy-beta.26.tgz#0e274b6b40055490826df92b538bc5db662147c5"
+  integrity sha512-XMpsQnH5s5Mn7CbRUMq2qT8TlHWNSygAizmpKnMhk3JDuLtqQNfxqGG41JzXiKNUcDrfcWt+MEyEa18sEjLYiA==
 
 "@trysound/sax@0.2.0":
   version "0.2.0"
@@ -7215,10 +7215,10 @@ tr46@^3.0.0:
   dependencies:
     punycode "^2.1.1"
 
-trpc-pokemon@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/trpc-pokemon/-/trpc-pokemon-1.0.3.tgz#92534f12634138aabecafdd2b7133056c73be9c9"
-  integrity sha512-UWnzcKAu9imT3o3wpj8yXMZo0E05+E0fpKiRIMcKleIejtiBR5KajFi5/VrJ9WTTXxv2f31b+EMSRQ1PH41Frg==
+trpc-pokemon@^2.0.0-next.0:
+  version "2.0.0-next.0"
+  resolved "https://registry.yarnpkg.com/trpc-pokemon/-/trpc-pokemon-2.0.0-next.0.tgz#d12a5a117d8cbe58d089b43ecb33c368d1f33b9a"
+  integrity sha512-TBcouSU77UyzYf9sh4JRrlS3iAsM7Q74G2l/Moxq64HFfwmqR4lvbVQMnb8TYE1n+WHKOPfX2EU4JZqK+CewlA==
 
 ts-jest@^28.0.8:
   version "28.0.8"
