@@ -33,7 +33,7 @@ const clientAtom = atom((get) =>
 const pokemonAtom = trpc.pokemon.all.atomWithQuery(
   undefined,
   undefined,
-  (get) => get(clientAtom).pokemon.all as any, // FIXME avoid any
+  (get) => get(clientAtom),
 );
 
 const Pokemon = () => {

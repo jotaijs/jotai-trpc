@@ -17,51 +17,64 @@ import { atom } from 'jotai';
 import { atomWithObservable } from 'jotai/utils';
 import type { Atom, Getter, WritableAtom } from 'jotai';
 
+const getProcedure = (obj: any, path: string[]) => {
+  for (let i = 0; i < path.length; ++i) {
+    obj = obj[path[i] as string];
+  }
+  return obj;
+};
+
 const isGetter = <T>(v: T | ((get: Getter) => T)): v is (get: Getter) => T =>
   typeof v === 'function';
 
 type ValueOrGetter<T> = T | ((get: Getter) => T);
 
-const atomWithQuery = <TProcedure extends AnyQueryProcedure>(
-  getProcedure: (get: Getter) => TProcedure,
+const atomWithQuery = <TProcedure extends AnyQueryProcedure, TClient>(
+  path: string[],
+  getClient: (get: Getter) => TClient,
   getInput: ValueOrGetter<inferProcedureInput<TProcedure>>,
   getOptions?: ValueOrGetter<TRPCRequestOptions>,
 ) => {
   type Output = inferProcedureOutput<TProcedure>;
   const queryAtom = atom(async (get) => {
-    const procedure = getProcedure(get);
+    const procedure = getProcedure(getClient(get), path);
     const input = isGetter(getInput) ? getInput(get) : getInput;
     const options = isGetter(getOptions) ? getOptions(get) : getOptions;
-    const output: Output = await (procedure as any).query(input, options);
+    const output: Output = await procedure.query(input, options);
     return output;
   });
   return queryAtom;
 };
 
-const atomWithMutation = <TProcedure extends AnyMutationProcedure>(
-  getProcedure: (get: Getter) => TProcedure,
+const atomWithMutation = <TProcedure extends AnyMutationProcedure, TClient>(
+  path: string[],
+  getClient: (get: Getter) => TClient,
 ) => {
   type Args = ProcedureArgs<TProcedure['_def']>;
   type Output = inferProcedureOutput<TProcedure>;
   const mutationAtom = atom(
     null as Output | null,
     async (get, set, args: Args) => {
-      const procedure = getProcedure(get);
-      const result = await (procedure as any).mutation(...args);
-      set(mutationAtom, result as any);
+      const procedure = getProcedure(getClient(get), path);
+      const result = await procedure.mutation(...args);
+      set(mutationAtom, result);
     },
   );
   return mutationAtom;
 };
 
-const atomWithSubscription = <TProcedure extends AnySubscriptionProcedure>(
-  getProcedure: (get: Getter) => TProcedure,
+const atomWithSubscription = <
+  TProcedure extends AnySubscriptionProcedure,
+  TClient,
+>(
+  path: string[],
+  getClient: (get: Getter) => TClient,
   getInput: ValueOrGetter<inferProcedureInput<TProcedure>>,
   getOptions?: ValueOrGetter<TRPCRequestOptions>,
 ) => {
   type Output = inferProcedureOutput<TProcedure>;
   const subscriptionAtom = atomWithObservable((get) => {
-    const procedure = getProcedure(get);
+    const procedure = getProcedure(getClient(get), path);
     const input = isGetter(getInput) ? getInput(get) : getInput;
     const options = isGetter(getOptions) ? getOptions(get) : getOptions;
     const observable = {
@@ -73,7 +86,7 @@ const atomWithSubscription = <TProcedure extends AnySubscriptionProcedure>(
           onNext: arg.next.bind(arg),
           onError: arg.error.bind(arg),
         };
-        const unsubscribable = (procedure as any).subscribe(input, {
+        const unsubscribable = procedure.subscribe(input, {
           ...options,
           ...callbacks,
         });
@@ -85,45 +98,50 @@ const atomWithSubscription = <TProcedure extends AnySubscriptionProcedure>(
   return subscriptionAtom;
 };
 
-type QueryResolver<TProcedure extends AnyProcedure> = (
+type QueryResolver<TProcedure extends AnyProcedure, TClient> = (
   getInput: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[0]>,
   getOptions?: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
-  getProcedure?: (get: Getter) => TProcedure,
+  getClient?: (get: Getter) => TClient,
 ) => Atom<Promise<inferProcedureOutput<TProcedure>>>;
 
-type MutationResolver<TProcedure extends AnyProcedure> = (
-  getProcedure?: (get: Getter) => TProcedure,
+type MutationResolver<TProcedure extends AnyProcedure, TClient> = (
+  getClient?: (get: Getter) => TClient,
 ) => WritableAtom<
   inferProcedureOutput<TProcedure> | null,
   ProcedureArgs<TProcedure['_def']>
 >;
 
-type SubscriptionResolver<TProcedure extends AnyProcedure> = (
+type SubscriptionResolver<TProcedure extends AnyProcedure, TClient> = (
   getInput: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[0]>,
   getOptions?: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
-  getProcedure?: (get: Getter) => TProcedure,
+  getClient?: (get: Getter) => TClient,
 ) => Atom<inferObservableValue<inferProcedureOutput<TProcedure>>>;
 
-type DecorateProcedure<TProcedure extends AnyProcedure> =
-  TProcedure extends AnyQueryProcedure
-    ? {
-        atomWithQuery: QueryResolver<TProcedure>;
-      }
-    : TProcedure extends AnyMutationProcedure
-    ? {
-        atomWithMutation: MutationResolver<TProcedure>;
-      }
-    : TProcedure extends AnySubscriptionProcedure
-    ? {
-        atomWithSubscription: SubscriptionResolver<TProcedure>;
-      }
-    : never;
+type DecorateProcedure<
+  TProcedure extends AnyProcedure,
+  TClient,
+> = TProcedure extends AnyQueryProcedure
+  ? {
+      atomWithQuery: QueryResolver<TProcedure, TClient>;
+    }
+  : TProcedure extends AnyMutationProcedure
+  ? {
+      atomWithMutation: MutationResolver<TProcedure, TClient>;
+    }
+  : TProcedure extends AnySubscriptionProcedure
+  ? {
+      atomWithSubscription: SubscriptionResolver<TProcedure, TClient>;
+    }
+  : never;
 
-type DecoratedProcedureRecord<TProcedures extends ProcedureRouterRecord> = {
+type DecoratedProcedureRecord<
+  TProcedures extends ProcedureRouterRecord,
+  TClient,
+> = {
   [TKey in keyof TProcedures]: TProcedures[TKey] extends AnyRouter
-    ? DecoratedProcedureRecord<TProcedures[TKey]['_def']['record']>
+    ? DecoratedProcedureRecord<TProcedures[TKey]['_def']['record'], TClient>
     : TProcedures[TKey] extends AnyProcedure
-    ? DecorateProcedure<TProcedures[TKey]>
+    ? DecorateProcedure<TProcedures[TKey], TClient>
     : never;
 };
 
@@ -132,43 +150,48 @@ export function createTRPCJotai<TRouter extends AnyRouter>(
 ) {
   const client = createTRPCProxyClient<TRouter>(opts);
 
-  const createProxy = (target: any, parent?: any, parentProp?: string): any => {
+  const createProxy = (target: any, path: readonly string[] = []): any => {
     return new Proxy(
       () => {
         // empty
       },
       {
         get(_target, prop: string) {
-          return createProxy(target[prop], target, prop);
+          return createProxy(target[prop], [...path, prop]);
         },
         apply(_target, _thisArg, args) {
+          const parentProp = path[path.length - 1];
+          const parentPath = path.slice(0, -1);
           if (parentProp === 'atomWithQuery') {
-            const [getInput, getOptions, getProcedure] = args;
+            const [getInput, getOptions, getClient] = args;
             return atomWithQuery(
-              getProcedure || (() => parent),
+              parentPath,
+              getClient || (() => client),
               getInput,
               getOptions,
             );
           }
           if (parentProp === 'atomWithMutation') {
-            const [getProcedure] = args;
-            return atomWithMutation(getProcedure || (() => parent));
+            const [getClient] = args;
+            return atomWithMutation(parentPath, getClient || (() => client));
           }
           if (parentProp === 'atomWithSubscription') {
-            const [getInput, getOptions, getProcedure] = args;
+            const [getInput, getOptions, getClient] = args;
             return atomWithSubscription(
-              getProcedure || (() => parent),
+              parentPath,
+              getClient || (() => client),
               getInput,
               getOptions,
             );
           }
-          throw new Error(`unexpected function call ${parentProp}`);
+          throw new Error(`unexpected function call ${path.join('/')}`);
         },
       },
     );
   };
 
   return createProxy(client) as DecoratedProcedureRecord<
-    TRouter['_def']['record']
+    TRouter['_def']['record'],
+    typeof client
   >;
 }
