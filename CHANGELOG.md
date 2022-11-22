@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+
+## [0.4.0] - 2022-11-22
 ### Added
 - trpc 10 migration #6
 
