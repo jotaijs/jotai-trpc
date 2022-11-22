@@ -13,9 +13,9 @@ import type {
 } from '@trpc/server';
 import type { inferObservableValue } from '@trpc/server/observable';
 
-import { atom } from 'jotai';
-import { atomWithObservable } from 'jotai/utils';
-import type { Atom, Getter, WritableAtom } from 'jotai';
+import { atom } from 'jotai/vanilla';
+import type { Atom, Getter, WritableAtom } from 'jotai/vanilla';
+import { atomWithObservable } from 'jotai/vanilla/utils';
 
 const getProcedure = (obj: any, path: string[]) => {
   for (let i = 0; i < path.length; ++i) {
@@ -56,8 +56,9 @@ const atomWithMutation = <TProcedure extends AnyMutationProcedure, TClient>(
     null as Output | null,
     async (get, set, args: Args) => {
       const procedure = getProcedure(getClient(get), path);
-      const result = await procedure.mutation(...args);
+      const result: Output = await procedure.mutation(...args);
       set(mutationAtom, result);
+      return result;
     },
   );
   return mutationAtom;
@@ -108,7 +109,8 @@ type MutationResolver<TProcedure extends AnyProcedure, TClient> = (
   getClient?: (get: Getter) => TClient,
 ) => WritableAtom<
   inferProcedureOutput<TProcedure> | null,
-  ProcedureArgs<TProcedure['_def']>
+  [ProcedureArgs<TProcedure['_def']>],
+  Promise<inferProcedureOutput<TProcedure>>
 >;
 
 type SubscriptionResolver<TProcedure extends AnyProcedure, TClient> = (

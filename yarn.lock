@@ -4880,10 +4880,9 @@ jest@^29.3.1:
     import-local "^3.0.2"
     jest-cli "^29.3.1"
 
-jotai@^1.10.0:
+"jotai@https://pkg.csb.dev/pmndrs/jotai/commit/00aeb2eb/jotai":
   version "1.10.0"
-  resolved "https://registry.yarnpkg.com/jotai/-/jotai-1.10.0.tgz#50c5224789282eca1cdc907a51e316d8d94c5976"
-  integrity sha512-3Q8kQU3Ktds+80Ku4dVcvnwSXEcK0Fg0b6mC1+4wz3rmF64lOGNUySKXQ4njvYCWodR8bw2HygOKYSYkHxQQmA==
+  resolved "https://pkg.csb.dev/pmndrs/jotai/commit/00aeb2eb/jotai#a4266a8226a7094ce9181d8cc4f8738623d1ea43"
 
 js-sdsl@^4.1.4:
   version "4.2.0"
