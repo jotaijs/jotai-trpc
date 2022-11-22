@@ -1,29 +1,39 @@
 import React, { Suspense } from 'react';
 import { atom, useAtom } from 'jotai';
-import { createTRPCClient } from '@trpc/client';
-import { createAtomCreators } from 'jotai-trpc';
+import { createTRPCProxyClient, httpLink } from '@trpc/client';
+import { createTRPCJotai } from 'jotai-trpc';
 import { trpcPokemonUrl } from 'trpc-pokemon';
 import type { PokemonRouter } from 'trpc-pokemon';
 import { ErrorBoundary } from 'react-error-boundary';
 import type { FallbackProps } from 'react-error-boundary';
 
-const { atomWithQuery } = createAtomCreators<PokemonRouter>({
-  url: trpcPokemonUrl,
+const trpc = createTRPCJotai<PokemonRouter>({
+  links: [
+    httpLink({
+      url: trpcPokemonUrl,
+    }),
+  ],
 });
 
 const tokenAtom = atom('');
 
 const clientAtom = atom((get) =>
-  createTRPCClient<PokemonRouter>({
-    url: get(tokenAtom) ? trpcPokemonUrl : 'Invalid URL',
-    headers: {
-      Authorization: `Bearer ${get(tokenAtom)}`,
-    },
+  createTRPCProxyClient<PokemonRouter>({
+    links: [
+      httpLink({
+        url: get(tokenAtom) ? trpcPokemonUrl : 'Invalid URL',
+        headers: {
+          Authorization: `Bearer ${get(tokenAtom)}`,
+        },
+      }),
+    ],
   }),
 );
 
-const pokemonAtom = atomWithQuery('pokemon.all', [], undefined, (get) =>
-  get(clientAtom),
+const pokemonAtom = trpc.pokemon.all.atomWithQuery(
+  undefined,
+  undefined,
+  (get) => get(clientAtom),
 );
 
 const Pokemon = () => {

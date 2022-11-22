@@ -1,11 +1,16 @@
 import React, { Suspense } from 'react';
 import { atom, useAtom } from 'jotai';
-import { createAtomCreators } from 'jotai-trpc';
+import { httpLink } from '@trpc/client';
+import { createTRPCJotai } from 'jotai-trpc';
 import { trpcPokemonUrl } from 'trpc-pokemon';
 import type { PokemonRouter } from 'trpc-pokemon';
 
-const { atomWithQuery } = createAtomCreators<PokemonRouter>({
-  url: trpcPokemonUrl,
+const trpc = createTRPCJotai<PokemonRouter>({
+  links: [
+    httpLink({
+      url: trpcPokemonUrl,
+    }),
+  ],
 });
 
 const NAMES = [
@@ -22,7 +27,7 @@ const NAMES = [
 
 const nameAtom = atom(NAMES[0] as string);
 
-const pokemonAtom = atomWithQuery('pokemon.byId', (get) => [get(nameAtom)]);
+const pokemonAtom = trpc.pokemon.byId.atomWithQuery((get) => get(nameAtom));
 
 const Pokemon = () => {
   const [data] = useAtom(pokemonAtom);

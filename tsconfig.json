@@ -17,6 +17,7 @@
     "paths": {
       "jotai-trpc": ["./src"]
     },
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "skipLibCheck": true
   }
 }
