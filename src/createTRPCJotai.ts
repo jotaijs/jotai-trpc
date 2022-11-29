@@ -56,7 +56,7 @@ const atomWithMutation = <TProcedure extends AnyMutationProcedure, TClient>(
     null as Output | null,
     async (get, set, args: Args) => {
       const procedure = getProcedure(getClient(get), path);
-      const result = await procedure.mutation(...args);
+      const result = await procedure.mutate(...args);
       set(mutationAtom, result);
     },
   );
