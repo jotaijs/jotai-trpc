@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.4.1] - 2022-11-29
+### Changed
+- fix: should be mutate method, instead of mutation #10
+
 ## [0.4.0] - 2022-11-22
 ### Added
 - trpc 10 migration #6
