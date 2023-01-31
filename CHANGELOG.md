@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2023-01-31
+### Added
+- Migrate to Jotai v2 API #8
+
 ## [0.4.1] - 2022-11-29
 ### Changed
 - fix: should be mutate method, instead of mutation #10

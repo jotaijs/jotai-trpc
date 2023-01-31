@@ -1,11 +1,11 @@
 {
   "name": "jotai-trpc",
   "description": "👻🧊",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "author": "Daishi Kato",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jotai-labs/jotai-trpc.git"
+    "url": "https://github.com/jotaijs/jotai-trpc.git"
   },
   "source": "./src/index.ts",
   "main": "./dist/index.umd.js",
