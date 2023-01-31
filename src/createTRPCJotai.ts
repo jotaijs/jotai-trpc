@@ -13,9 +13,9 @@ import type {
 } from '@trpc/server';
 import type { inferObservableValue } from '@trpc/server/observable';
 
-import { atom } from 'jotai';
-import { atomWithObservable } from 'jotai/utils';
-import type { Atom, Getter, WritableAtom } from 'jotai';
+import { atom } from 'jotai/vanilla';
+import type { Atom, Getter, WritableAtom } from 'jotai/vanilla';
+import { atomWithObservable } from 'jotai/vanilla/utils';
 
 const getProcedure = (obj: any, path: string[]) => {
   for (let i = 0; i < path.length; ++i) {
@@ -36,11 +36,11 @@ const atomWithQuery = <TProcedure extends AnyQueryProcedure, TClient>(
   getOptions?: ValueOrGetter<TRPCRequestOptions>,
 ) => {
   type Output = inferProcedureOutput<TProcedure>;
-  const queryAtom = atom(async (get) => {
+  const queryAtom = atom(async (get, { signal }) => {
     const procedure = getProcedure(getClient(get), path);
     const input = isGetter(getInput) ? getInput(get) : getInput;
     const options = isGetter(getOptions) ? getOptions(get) : getOptions;
-    const output: Output = await procedure.query(input, options);
+    const output: Output = await procedure.query(input, { signal, ...options });
     return output;
   });
   return queryAtom;
@@ -56,8 +56,9 @@ const atomWithMutation = <TProcedure extends AnyMutationProcedure, TClient>(
     null as Output | null,
     async (get, set, args: Args) => {
       const procedure = getProcedure(getClient(get), path);
-      const result = await procedure.mutate(...args);
+      const result: Output = await procedure.mutate(...args);
       set(mutationAtom, result);
+      return result;
     },
   );
   return mutationAtom;
@@ -108,7 +109,8 @@ type MutationResolver<TProcedure extends AnyProcedure, TClient> = (
   getClient?: (get: Getter) => TClient,
 ) => WritableAtom<
   inferProcedureOutput<TProcedure> | null,
-  ProcedureArgs<TProcedure['_def']>
+  [ProcedureArgs<TProcedure['_def']>],
+  Promise<inferProcedureOutput<TProcedure>>
 >;
 
 type SubscriptionResolver<TProcedure extends AnyProcedure, TClient> = (

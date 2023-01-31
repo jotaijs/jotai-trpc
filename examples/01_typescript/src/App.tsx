@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
-import { atom, useAtom } from 'jotai';
+import { useAtom } from 'jotai/react';
+import { atom } from 'jotai/vanilla';
 import { httpLink } from '@trpc/client';
 import { createTRPCJotai } from 'jotai-trpc';
 import { trpcPokemonUrl } from 'trpc-pokemon';
