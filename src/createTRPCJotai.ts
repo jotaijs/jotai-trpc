@@ -29,17 +29,26 @@ const isGetter = <T>(v: T | ((get: Getter) => T)): v is (get: Getter) => T =>
 
 type ValueOrGetter<T> = T | ((get: Getter) => T);
 
+type CustomOptions<Output> =
+  | { disabled?: false }
+  | { disabled: true; defaultOutput: Output };
+
 const atomWithQuery = <TProcedure extends AnyQueryProcedure, TClient>(
   path: string[],
   getClient: (get: Getter) => TClient,
   getInput: ValueOrGetter<inferProcedureInput<TProcedure>>,
-  getOptions?: ValueOrGetter<TRPCRequestOptions>,
+  getOptions?: ValueOrGetter<
+    TRPCRequestOptions & CustomOptions<inferProcedureOutput<TProcedure>>
+  >,
 ) => {
   type Output = inferProcedureOutput<TProcedure>;
   const queryAtom = atom(async (get, { signal }) => {
     const procedure = getProcedure(getClient(get), path);
     const input = isGetter(getInput) ? getInput(get) : getInput;
     const options = isGetter(getOptions) ? getOptions(get) : getOptions;
+    if (options?.disabled) {
+      return options.defaultOutput;
+    }
     const output: Output = await procedure.query(input, { signal, ...options });
     return output;
   });
