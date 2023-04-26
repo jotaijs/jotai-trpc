@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+
+## [0.5.1] - 2023-04-26
 ### Changed
 - feat: disabled option in atomWithQuery, support async input #14
 
