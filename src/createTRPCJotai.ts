@@ -28,18 +28,32 @@ const isGetter = <T>(v: T | ((get: Getter) => T)): v is (get: Getter) => T =>
   typeof v === 'function';
 
 type ValueOrGetter<T> = T | ((get: Getter) => T);
+type AsyncValueOrGetter<T> =
+  | T
+  | Promise<T>
+  | ((get: Getter) => T)
+  | ((get: Getter) => Promise<T>);
+
+export const DISABLED = Symbol();
+
+type CustomOptions = { disabledOutput?: unknown };
 
 const atomWithQuery = <TProcedure extends AnyQueryProcedure, TClient>(
   path: string[],
   getClient: (get: Getter) => TClient,
-  getInput: ValueOrGetter<inferProcedureInput<TProcedure>>,
-  getOptions?: ValueOrGetter<TRPCRequestOptions>,
+  getInput: AsyncValueOrGetter<
+    inferProcedureInput<TProcedure> | typeof DISABLED
+  >,
+  getOptions?: ValueOrGetter<TRPCRequestOptions & CustomOptions>,
 ) => {
   type Output = inferProcedureOutput<TProcedure>;
   const queryAtom = atom(async (get, { signal }) => {
     const procedure = getProcedure(getClient(get), path);
-    const input = isGetter(getInput) ? getInput(get) : getInput;
     const options = isGetter(getOptions) ? getOptions(get) : getOptions;
+    const input = await (isGetter(getInput) ? getInput(get) : getInput);
+    if (input === DISABLED) {
+      return options?.disabledOutput;
+    }
     const output: Output = await procedure.query(input, { signal, ...options });
     return output;
   });
@@ -99,11 +113,31 @@ const atomWithSubscription = <
   return subscriptionAtom;
 };
 
-type QueryResolver<TProcedure extends AnyProcedure, TClient> = (
-  getInput: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[0]>,
-  getOptions?: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
-  getClient?: (get: Getter) => TClient,
-) => Atom<Promise<inferProcedureOutput<TProcedure>>>;
+type QueryResolver<TProcedure extends AnyProcedure, TClient> = {
+  (
+    getInput: AsyncValueOrGetter<ProcedureArgs<TProcedure['_def']>[0]>,
+    getOptions?: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
+    getClient?: (get: Getter) => TClient,
+  ): Atom<Promise<inferProcedureOutput<TProcedure>>>;
+  (
+    getInput: AsyncValueOrGetter<
+      ProcedureArgs<TProcedure['_def']>[0] | typeof DISABLED
+    >,
+    getOptions?: ValueOrGetter<
+      ProcedureArgs<TProcedure['_def']>[1] & { disabledOutput?: undefined }
+    >,
+    getClient?: (get: Getter) => TClient,
+  ): Atom<Promise<inferProcedureOutput<TProcedure> | undefined>>;
+  <DisabledOutput>(
+    getInput: AsyncValueOrGetter<
+      ProcedureArgs<TProcedure['_def']>[0] | typeof DISABLED
+    >,
+    getOptions: ValueOrGetter<
+      ProcedureArgs<TProcedure['_def']>[1] & { disabledOutput: DisabledOutput }
+    >,
+    getClient?: (get: Getter) => TClient,
+  ): Atom<Promise<inferProcedureOutput<TProcedure> | DisabledOutput>>;
+};
 
 type MutationResolver<TProcedure extends AnyProcedure, TClient> = (
   getClient?: (get: Getter) => TClient,
