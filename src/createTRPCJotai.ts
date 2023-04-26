@@ -132,7 +132,7 @@ type QueryResolver<TProcedure extends AnyProcedure, TClient> = {
     getInput: AsyncValueOrGetter<
       ProcedureArgs<TProcedure['_def']>[0] | typeof DISABLED
     >,
-    getOptions?: ValueOrGetter<
+    getOptions: ValueOrGetter<
       ProcedureArgs<TProcedure['_def']>[1] & { disabledOutput: DisabledOutput }
     >,
     getClient?: (get: Getter) => TClient,
