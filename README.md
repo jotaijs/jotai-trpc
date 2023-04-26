@@ -9,3 +9,4 @@
 - [Auth token example](https://twitter.com/dai_shi/status/1567884719450365952)
 - [Mutation and subscription](https://twitter.com/dai_shi/status/1573470424884604928)
 - [tRPC v10 support](https://twitter.com/dai_shi/status/1595036169355788289)
+- [v0.5.1 release](https://twitter.com/dai_shi/status/1651194392085151745)
