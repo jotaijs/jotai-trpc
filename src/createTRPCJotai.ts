@@ -15,7 +15,7 @@ import type { inferObservableValue } from '@trpc/server/observable';
 
 import { atom } from 'jotai/vanilla';
 import type { Atom, Getter, WritableAtom } from 'jotai/vanilla';
-import { atomWithObservable } from 'jotai/vanilla/utils';
+import { atomWithObservable, atomWithRefresh } from 'jotai/vanilla/utils';
 
 const getProcedure = (obj: any, path: string[]) => {
   for (let i = 0; i < path.length; ++i) {
@@ -47,7 +47,7 @@ const atomWithQuery = <TProcedure extends AnyQueryProcedure, TClient>(
   getOptions?: ValueOrGetter<TRPCRequestOptions & CustomOptions>,
 ) => {
   type Output = inferProcedureOutput<TProcedure>;
-  const queryAtom = atom(async (get, { signal }) => {
+  const queryAtom = atomWithRefresh(async (get, { signal }) => {
     const procedure = getProcedure(getClient(get), path);
     const options = isGetter(getOptions) ? getOptions(get) : getOptions;
     const input = await (isGetter(getInput) ? getInput(get) : getInput);
