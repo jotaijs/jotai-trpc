@@ -169,14 +169,14 @@ type DecorateProcedure<
       atomWithQuery: QueryResolver<TProcedure, TClient>;
     }
   : TProcedure extends AnyMutationProcedure
-  ? {
-      atomWithMutation: MutationResolver<TProcedure, TClient>;
-    }
-  : TProcedure extends AnySubscriptionProcedure
-  ? {
-      atomWithSubscription: SubscriptionResolver<TProcedure, TClient>;
-    }
-  : never;
+    ? {
+        atomWithMutation: MutationResolver<TProcedure, TClient>;
+      }
+    : TProcedure extends AnySubscriptionProcedure
+      ? {
+          atomWithSubscription: SubscriptionResolver<TProcedure, TClient>;
+        }
+      : never;
 
 type DecoratedProcedureRecord<
   TProcedures extends ProcedureRouterRecord,
@@ -185,8 +185,8 @@ type DecoratedProcedureRecord<
   [TKey in keyof TProcedures]: TProcedures[TKey] extends AnyRouter
     ? DecoratedProcedureRecord<TProcedures[TKey]['_def']['record'], TClient>
     : TProcedures[TKey] extends AnyProcedure
-    ? DecorateProcedure<TProcedures[TKey], TClient>
-    : never;
+      ? DecorateProcedure<TProcedures[TKey], TClient>
+      : never;
 };
 
 export function createTRPCJotai<TRouter extends AnyRouter>(
