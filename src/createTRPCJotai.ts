@@ -15,7 +15,7 @@ import type { inferObservableValue } from '@trpc/server/observable';
 
 import { atom } from 'jotai/vanilla';
 import type { Atom, Getter, WritableAtom } from 'jotai/vanilla';
-import { atomWithObservable, atomWithRefresh } from 'jotai/vanilla/utils';
+import { atomWithObservable } from 'jotai/vanilla/utils';
 
 const getProcedure = (obj: any, path: string[]) => {
   for (let i = 0; i < path.length; ++i) {
@@ -47,16 +47,24 @@ const atomWithQuery = <TProcedure extends AnyQueryProcedure, TClient>(
   getOptions?: ValueOrGetter<TRPCRequestOptions & CustomOptions>,
 ) => {
   type Output = inferProcedureOutput<TProcedure>;
-  const queryAtom = atomWithRefresh(async (get, { signal }) => {
-    const procedure = getProcedure(getClient(get), path);
-    const options = isGetter(getOptions) ? getOptions(get) : getOptions;
-    const input = await (isGetter(getInput) ? getInput(get) : getInput);
-    if (input === DISABLED) {
-      return options?.disabledOutput;
-    }
-    const output: Output = await procedure.query(input, { signal, ...options });
-    return output;
-  });
+  const refreshAtom = atom(0);
+  const queryAtom = atom(
+    async (get, { signal }) => {
+      get(refreshAtom);
+      const procedure = getProcedure(getClient(get), path);
+      const options = isGetter(getOptions) ? getOptions(get) : getOptions;
+      const input = await (isGetter(getInput) ? getInput(get) : getInput);
+      if (input === DISABLED) {
+        return options?.disabledOutput;
+      }
+      const output: Output = await procedure.query(input, {
+        signal,
+        ...options,
+      });
+      return output;
+    },
+    (_, set) => set(refreshAtom, (counter) => counter + 1),
+  );
   return queryAtom;
 };
 
