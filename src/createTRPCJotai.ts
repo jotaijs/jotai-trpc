@@ -47,16 +47,24 @@ const atomWithQuery = <TProcedure extends AnyQueryProcedure, TClient>(
   getOptions?: ValueOrGetter<TRPCRequestOptions & CustomOptions>,
 ) => {
   type Output = inferProcedureOutput<TProcedure>;
-  const queryAtom = atom(async (get, { signal }) => {
-    const procedure = getProcedure(getClient(get), path);
-    const options = isGetter(getOptions) ? getOptions(get) : getOptions;
-    const input = await (isGetter(getInput) ? getInput(get) : getInput);
-    if (input === DISABLED) {
-      return options?.disabledOutput;
-    }
-    const output: Output = await procedure.query(input, { signal, ...options });
-    return output;
-  });
+  const refreshAtom = atom(0);
+  const queryAtom = atom(
+    async (get, { signal }) => {
+      get(refreshAtom);
+      const procedure = getProcedure(getClient(get), path);
+      const options = isGetter(getOptions) ? getOptions(get) : getOptions;
+      const input = await (isGetter(getInput) ? getInput(get) : getInput);
+      if (input === DISABLED) {
+        return options?.disabledOutput;
+      }
+      const output: Output = await procedure.query(input, {
+        signal,
+        ...options,
+      });
+      return output;
+    },
+    (_, set) => set(refreshAtom, (counter) => counter + 1),
+  );
   return queryAtom;
 };
 

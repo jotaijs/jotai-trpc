@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 devDependencies:
   '@trpc/client':
     specifier: ^10.31.0
@@ -56,8 +60,8 @@ devDependencies:
     specifier: ^29.5.0
     version: 29.5.0
   jotai:
-    specifier: ^2.2.1
-    version: 2.2.1(react@18.2.0)
+    specifier: ^2.7.0
+    version: 2.7.0(@types/react@18.2.13)(react@18.2.0)
   microbundle:
     specifier: ^0.15.1
     version: 0.15.1
@@ -5607,15 +5611,19 @@ packages:
       - ts-node
     dev: true
 
-  /jotai@2.2.1(react@18.2.0):
-    resolution: {integrity: sha512-Gz4tpbRQy9OiFgBwF9F7TieDn0UTE3C0IFSDuxHjOIvgn2tACH30UKz6p/wIlfoZROXSTCIxEvYEa7Y25WM+8g==}
+  /jotai@2.7.0(@types/react@18.2.13)(react@18.2.0):
+    resolution: {integrity: sha512-4qsyFKu4MprI39rj2uoItyhu24NoCHzkOV7z70PQr65SpzV6CSyhQvVIfbNlNqOIOspNMdf5OK+kTXLvqe63Jw==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
+      '@types/react': '>=17.0.0'
       react: '>=17.0.0'
     peerDependenciesMeta:
+      '@types/react':
+        optional: true
       react:
         optional: true
     dependencies:
+      '@types/react': 18.2.13
       react: 18.2.0
     dev: true
 
