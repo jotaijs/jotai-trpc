@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+### Changed
+- feat: refreshable query atom #19
 
 ## [0.5.1] - 2023-04-26
 ### Changed
