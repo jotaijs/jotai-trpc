@@ -36,7 +36,10 @@ type AsyncValueOrGetter<T> =
 
 export const DISABLED = Symbol();
 
-type CustomOptions = { disabledOutput?: unknown };
+type CustomOptions<TProcedure> = {
+  disabledOutput?: unknown;
+  initialData?: inferProcedureOutput<TProcedure>;
+};
 
 const atomWithQuery = <TProcedure extends AnyQueryProcedure, TClient>(
   path: string[],
@@ -44,16 +47,22 @@ const atomWithQuery = <TProcedure extends AnyQueryProcedure, TClient>(
   getInput: AsyncValueOrGetter<
     inferProcedureInput<TProcedure> | typeof DISABLED
   >,
-  getOptions?: ValueOrGetter<TRPCRequestOptions & CustomOptions>,
+  getOptions?: ValueOrGetter<TRPCRequestOptions & CustomOptions<TProcedure>>,
 ) => {
   type Output = inferProcedureOutput<TProcedure>;
   const refreshAtom = atom(0);
   const queryAtom = atom(
     async (get, { signal }) => {
-      get(refreshAtom);
       const procedure = getProcedure(getClient(get), path);
       const options = isGetter(getOptions) ? getOptions(get) : getOptions;
       const input = await (isGetter(getInput) ? getInput(get) : getInput);
+
+      const isInitial = get(refreshAtom) === 0;
+
+      if (isInitial && options?.initialData !== undefined) {
+        return options.initialData;
+      }
+
       if (input === DISABLED) {
         return options?.disabledOutput;
       }
