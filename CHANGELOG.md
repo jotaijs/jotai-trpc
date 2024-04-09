@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.6.1] - 2024-04-09
+### Changed
+- Fix refresh query atom type #22
+
 ## [0.6.0] - 2024-03-11
 ### Changed
 - feat: refreshable query atom #19
