@@ -126,7 +126,7 @@ type QueryResolver<TProcedure extends AnyProcedure, TClient> = {
     getInput: AsyncValueOrGetter<ProcedureArgs<TProcedure['_def']>[0]>,
     getOptions?: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
     getClient?: (get: Getter) => TClient,
-  ): Atom<Promise<inferProcedureOutput<TProcedure>>>;
+  ): WritableAtom<Promise<inferProcedureOutput<TProcedure>>, [], void>;
   (
     getInput: AsyncValueOrGetter<
       ProcedureArgs<TProcedure['_def']>[0] | typeof DISABLED
@@ -135,7 +135,11 @@ type QueryResolver<TProcedure extends AnyProcedure, TClient> = {
       ProcedureArgs<TProcedure['_def']>[1] & { disabledOutput?: undefined }
     >,
     getClient?: (get: Getter) => TClient,
-  ): Atom<Promise<inferProcedureOutput<TProcedure> | undefined>>;
+  ): WritableAtom<
+    Promise<inferProcedureOutput<TProcedure> | undefined>,
+    [],
+    void
+  >;
   <DisabledOutput>(
     getInput: AsyncValueOrGetter<
       ProcedureArgs<TProcedure['_def']>[0] | typeof DISABLED
@@ -144,7 +148,11 @@ type QueryResolver<TProcedure extends AnyProcedure, TClient> = {
       ProcedureArgs<TProcedure['_def']>[1] & { disabledOutput: DisabledOutput }
     >,
     getClient?: (get: Getter) => TClient,
-  ): Atom<Promise<inferProcedureOutput<TProcedure> | DisabledOutput>>;
+  ): WritableAtom<
+    Promise<inferProcedureOutput<TProcedure> | DisabledOutput>,
+    [],
+    void
+  >;
 };
 
 type MutationResolver<TProcedure extends AnyProcedure, TClient> = (
