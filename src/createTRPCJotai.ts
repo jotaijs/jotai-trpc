@@ -1,5 +1,5 @@
-import { createTRPCProxyClient, TRPCRequestOptions } from '@trpc/client';
-import type { CreateTRPCClientOptions } from '@trpc/client';
+import { createTRPCProxyClient } from '@trpc/client';
+import type { TRPCRequestOptions, CreateTRPCClientOptions } from '@trpc/client';
 import type {
   AnyMutationProcedure,
   AnyProcedure,
@@ -17,6 +17,7 @@ import { atom } from 'jotai/vanilla';
 import type { Atom, Getter, WritableAtom } from 'jotai/vanilla';
 import { atomWithObservable } from 'jotai/vanilla/utils';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getProcedure = (obj: any, path: string[]) => {
   for (let i = 0; i < path.length; ++i) {
     obj = obj[path[i] as string];
@@ -202,6 +203,7 @@ export function createTRPCJotai<TRouter extends AnyRouter>(
 ) {
   const client = createTRPCProxyClient<TRouter>(opts);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createProxy = (target: any, path: readonly string[] = []): any => {
     return new Proxy(
       () => {
