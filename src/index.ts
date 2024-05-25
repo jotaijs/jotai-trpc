@@ -1,1 +1,1 @@
-export { createTRPCJotai, DISABLED } from './createTRPCJotai';
+export { createTRPCJotai, DISABLED } from './createTRPCJotai.js';

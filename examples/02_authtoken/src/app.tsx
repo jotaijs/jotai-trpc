@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { useAtom } from 'jotai/react';
 import { atom } from 'jotai/vanilla';
 import { createTRPCProxyClient, httpLink } from '@trpc/client';
@@ -42,7 +42,7 @@ const Pokemon = () => {
   return (
     <ul>
       {data.map((item) => (
-        <li>
+        <li key={item.id}>
           <div>ID: {item.id}</div>
           <div>Height: {item.height}</div>
           <div>Weight: {item.weight}</div>
