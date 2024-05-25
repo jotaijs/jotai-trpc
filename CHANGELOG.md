@@ -1,10 +1,12 @@
 # Change Log
 
+## [Unreleased]
+
+## [0.7.0] - 2024-05-25
+
 ### Changed
 
 - Module-first setup #23
-
-## [Unreleased]
 
 ## [0.6.1] - 2024-04-09
 
