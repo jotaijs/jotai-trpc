@@ -6,8 +6,8 @@ import type {
   AnyTRPCQueryProcedure,
   AnyTRPCSubscriptionProcedure,
   AnyTRPCRouter,
-  ProcedureArgs,
-  ProcedureRouterRecord,
+  TRPCRouterRecord,
+  TRPCProcedureOptions,
   inferProcedureInput,
   inferProcedureOutput,
 } from '@trpc/server';
@@ -73,7 +73,7 @@ const atomWithMutation = <TProcedure extends AnyTRPCMutationProcedure, TClient>(
   path: string[],
   getClient: (get: Getter) => TClient,
 ) => {
-  type Args = ProcedureArgs<TProcedure['_def']>;
+  type Args = [inferProcedureInput<TProcedure>, TRPCProcedureOptions];
   type Output = inferProcedureOutput<TProcedure>;
   const mutationAtom = atom(
     null as Output | null,
@@ -124,16 +124,16 @@ const atomWithSubscription = <
 
 type QueryResolver<TProcedure extends AnyTRPCProcedure, TClient> = {
   (
-    getInput: AsyncValueOrGetter<ProcedureArgs<TProcedure['_def']>[0]>,
-    getOptions?: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
+    getInput: AsyncValueOrGetter<inferProcedureInput<TProcedure>>,
+    getOptions?: ValueOrGetter<TRPCProcedureOptions>,
     getClient?: (get: Getter) => TClient,
   ): WritableAtom<Promise<inferProcedureOutput<TProcedure>>, [], void>;
   (
     getInput: AsyncValueOrGetter<
-      ProcedureArgs<TProcedure['_def']>[0] | typeof DISABLED
+      inferProcedureInput<TProcedure> | typeof DISABLED
     >,
     getOptions?: ValueOrGetter<
-      ProcedureArgs<TProcedure['_def']>[1] & { disabledOutput?: undefined }
+      TRPCProcedureOptions & { disabledOutput?: undefined }
     >,
     getClient?: (get: Getter) => TClient,
   ): WritableAtom<
@@ -143,10 +143,10 @@ type QueryResolver<TProcedure extends AnyTRPCProcedure, TClient> = {
   >;
   <DisabledOutput>(
     getInput: AsyncValueOrGetter<
-      ProcedureArgs<TProcedure['_def']>[0] | typeof DISABLED
+      inferProcedureInput<TProcedure> | typeof DISABLED
     >,
     getOptions: ValueOrGetter<
-      ProcedureArgs<TProcedure['_def']>[1] & { disabledOutput: DisabledOutput }
+      TRPCProcedureOptions & { disabledOutput: DisabledOutput }
     >,
     getClient?: (get: Getter) => TClient,
   ): WritableAtom<
@@ -160,13 +160,13 @@ type MutationResolver<TProcedure extends AnyTRPCProcedure, TClient> = (
   getClient?: (get: Getter) => TClient,
 ) => WritableAtom<
   inferProcedureOutput<TProcedure> | null,
-  [ProcedureArgs<TProcedure['_def']>],
+  [[inferProcedureInput<TProcedure>, TRPCProcedureOptions]],
   Promise<inferProcedureOutput<TProcedure>>
 >;
 
 type SubscriptionResolver<TProcedure extends AnyTRPCProcedure, TClient> = (
-  getInput: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[0]>,
-  getOptions?: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
+  getInput: ValueOrGetter<inferProcedureInput<TProcedure>>,
+  getOptions?: ValueOrGetter<TRPCProcedureOptions>,
   getClient?: (get: Getter) => TClient,
 ) => Atom<inferObservableValue<inferProcedureOutput<TProcedure>>>;
 
@@ -188,7 +188,7 @@ type DecorateProcedure<
       : never;
 
 type DecoratedProcedureRecord<
-  TProcedures extends ProcedureRouterRecord,
+  TProcedures extends TRPCRouterRecord,
   TClient,
 > = {
   [TKey in keyof TProcedures]: TProcedures[TKey] extends AnyTRPCRouter
