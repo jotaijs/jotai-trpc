@@ -1,4 +1,4 @@
-import { createTRPCProxyClient } from '@trpc/client';
+import { createTRPCClient } from '@trpc/client';
 import type { TRPCRequestOptions, CreateTRPCClientOptions } from '@trpc/client';
 import type {
   AnyMutationProcedure,
@@ -201,7 +201,7 @@ type DecoratedProcedureRecord<
 export function createTRPCJotai<TRouter extends AnyRouter>(
   opts: CreateTRPCClientOptions<TRouter>,
 ) {
-  const client = createTRPCProxyClient<TRouter>(opts);
+  const client = createTRPCClient<TRouter>(opts);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createProxy = (target: any, path: readonly string[] = []): any => {

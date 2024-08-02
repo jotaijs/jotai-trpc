@@ -15,11 +15,11 @@ devDependencies:
     specifier: ^14.5.2
     version: 14.5.2(@testing-library/dom@10.1.0)
   '@trpc/client':
-    specifier: ^10.45.2
-    version: 10.45.2(@trpc/server@10.45.2)
+    specifier: ^11.0.0-rc.467
+    version: 11.0.0-rc.467(@trpc/server@11.0.0-rc.467)
   '@trpc/server':
-    specifier: ^10.45.2
-    version: 10.45.2
+    specifier: ^11.0.0-rc.467
+    version: 11.0.0-rc.467
   '@types/node':
     specifier: ^20.12.12
     version: 20.12.12
@@ -79,7 +79,7 @@ devDependencies:
     version: 4.0.13(react@18.3.1)
   trpc-pokemon:
     specifier: ^2.0.0-next.0
-    version: 2.0.0-next.0(@trpc/server@10.45.2)
+    version: 2.0.0-next.0(@trpc/server@11.0.0-rc.467)
   ts-expect:
     specifier: ^1.3.0
     version: 1.3.0
@@ -631,16 +631,16 @@ packages:
       '@testing-library/dom': 10.1.0
     dev: true
 
-  /@trpc/client@10.45.2(@trpc/server@10.45.2):
-    resolution: {integrity: sha512-ykALM5kYWTLn1zYuUOZ2cPWlVfrXhc18HzBDyRhoPYN0jey4iQHEFSEowfnhg1RvYnrAVjNBgHNeSAXjrDbGwg==}
+  /@trpc/client@11.0.0-rc.467(@trpc/server@11.0.0-rc.467):
+    resolution: {integrity: sha512-ovZaGdAUl+EEmtJJc5uuo95B0gw8+q3jwNjUQQmmSMU5Isq4sYdjIWNkhbrFtR8CovllFyrRrjAgCWdaOTEY4g==}
     peerDependencies:
-      '@trpc/server': 10.45.2
+      '@trpc/server': 11.0.0-rc.467+8f72171d6
     dependencies:
-      '@trpc/server': 10.45.2
+      '@trpc/server': 11.0.0-rc.467
     dev: true
 
-  /@trpc/server@10.45.2:
-    resolution: {integrity: sha512-wOrSThNNE4HUnuhJG6PfDRp4L2009KDVxsd+2VYH8ro6o/7/jwYZ8Uu5j+VaW+mOmc8EHerHzGcdbGNQSAUPgg==}
+  /@trpc/server@11.0.0-rc.467:
+    resolution: {integrity: sha512-94Gv26ALuBfxgFlSGV3x2uF2ixUEViuK0m3IPKOvCTMreisZkBqyTa3NkBcuPZW/AMUieM5P4Q2NrbHTIA0fKQ==}
     dev: true
 
   /@types/aria-query@5.0.4:
@@ -3069,12 +3069,12 @@ packages:
       is-number: 7.0.0
     dev: true
 
-  /trpc-pokemon@2.0.0-next.0(@trpc/server@10.45.2):
+  /trpc-pokemon@2.0.0-next.0(@trpc/server@11.0.0-rc.467):
     resolution: {integrity: sha512-TBcouSU77UyzYf9sh4JRrlS3iAsM7Q74G2l/Moxq64HFfwmqR4lvbVQMnb8TYE1n+WHKOPfX2EU4JZqK+CewlA==}
     peerDependencies:
       '@trpc/server': ^10.0.0-rc.4
     dependencies:
-      '@trpc/server': 10.45.2
+      '@trpc/server': 11.0.0-rc.467
     dev: true
 
   /ts-api-utils@1.3.0(typescript@5.4.5):
