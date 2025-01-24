@@ -107,7 +107,7 @@ const atomWithSubscription = <
         error: (err: unknown) => void;
       }) => {
         const callbacks = {
-          onNext: arg.next.bind(arg),
+          onData: arg.next.bind(arg),
           onError: arg.error.bind(arg),
         };
         const unsubscribable = procedure.subscribe(input, {
