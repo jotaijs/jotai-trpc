@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.7.1] - 2025-01-25
+
+### Changed
+
+- fix: subscription procedure should use onData, not onNext #26
+
 ## [0.7.0] - 2024-05-25
 
 ### Changed
