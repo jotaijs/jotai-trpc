@@ -12,7 +12,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "jotai-trpc": ["./src/index.js"]
+      "jotai-trpc": ["./src/index.ts"]
     }
   },
   "exclude": ["dist", "examples"]
