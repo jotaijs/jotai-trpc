@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
 import { useAtom } from 'jotai/react';
-import { atom } from 'jotai/vanilla';
+import {atom, type Getter} from 'jotai/vanilla';
 import { httpLink } from '@trpc/client';
-import { createTRPCJotai } from 'jotai-trpc';
 import { trpcPokemonUrl } from 'trpc-pokemon';
 import type { PokemonRouter } from 'trpc-pokemon';
+import { createTRPCJotai } from 'jotai-trpc';
 
 const trpc = createTRPCJotai<PokemonRouter>({
   links: [
@@ -28,7 +28,7 @@ const NAMES = [
 
 const nameAtom = atom(NAMES[0] as string);
 
-const pokemonAtom = trpc.pokemon.byId.atomWithQuery((get) => get(nameAtom));
+const pokemonAtom = trpc.pokemon.byId.atomWithQuery((get: Getter) => get(nameAtom));
 
 const Pokemon = () => {
   const [data] = useAtom(pokemonAtom);
