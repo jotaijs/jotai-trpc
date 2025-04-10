@@ -15,11 +15,11 @@ devDependencies:
     specifier: ^14.5.2
     version: 14.5.2(@testing-library/dom@10.1.0)
   '@trpc/client':
-    specifier: ^11.0.0-rc.467
-    version: 11.0.0-rc.467(@trpc/server@11.0.0-rc.467)
+    specifier: ^11.0.4
+    version: 11.0.4(@trpc/server@11.0.4)(typescript@5.4.5)
   '@trpc/server':
-    specifier: ^11.0.0-rc.467
-    version: 11.0.0-rc.467
+    specifier: ^11.0.4
+    version: 11.0.4(typescript@5.4.5)
   '@types/node':
     specifier: ^20.12.12
     version: 20.12.12
@@ -79,7 +79,7 @@ devDependencies:
     version: 4.0.13(react@18.3.1)
   trpc-pokemon:
     specifier: ^2.0.0-next.0
-    version: 2.0.0-next.0(@trpc/server@11.0.0-rc.467)
+    version: 2.0.0-next.0(@trpc/server@11.0.4)
   ts-expect:
     specifier: ^1.3.0
     version: 1.3.0
@@ -631,16 +631,22 @@ packages:
       '@testing-library/dom': 10.1.0
     dev: true
 
-  /@trpc/client@11.0.0-rc.467(@trpc/server@11.0.0-rc.467):
-    resolution: {integrity: sha512-ovZaGdAUl+EEmtJJc5uuo95B0gw8+q3jwNjUQQmmSMU5Isq4sYdjIWNkhbrFtR8CovllFyrRrjAgCWdaOTEY4g==}
+  /@trpc/client@11.0.4(@trpc/server@11.0.4)(typescript@5.4.5):
+    resolution: {integrity: sha512-2xIXqRNc8wH3zgcGp1yZ8P2ZL15BoFWq2RS8S3ldjvxsdJfnoYmcvCNzySw8nIrWbKiXl9prdw+bGIUOdG/omw==}
     peerDependencies:
-      '@trpc/server': 11.0.0-rc.467+8f72171d6
+      '@trpc/server': 11.0.4
+      typescript: '>=5.7.2'
     dependencies:
-      '@trpc/server': 11.0.0-rc.467
+      '@trpc/server': 11.0.4(typescript@5.4.5)
+      typescript: 5.4.5
     dev: true
 
-  /@trpc/server@11.0.0-rc.467:
-    resolution: {integrity: sha512-94Gv26ALuBfxgFlSGV3x2uF2ixUEViuK0m3IPKOvCTMreisZkBqyTa3NkBcuPZW/AMUieM5P4Q2NrbHTIA0fKQ==}
+  /@trpc/server@11.0.4(typescript@5.4.5):
+    resolution: {integrity: sha512-beDEGEw+slNiYxLUpZ8HKU1mnZBoP/VLMtrKh2ABKl7VC0PQV9XcDMVjB0GcSW15nTSiOnGDGyFDeudp4dH2qw==}
+    peerDependencies:
+      typescript: '>=5.7.2'
+    dependencies:
+      typescript: 5.4.5
     dev: true
 
   /@types/aria-query@5.0.4:
@@ -3069,12 +3075,12 @@ packages:
       is-number: 7.0.0
     dev: true
 
-  /trpc-pokemon@2.0.0-next.0(@trpc/server@11.0.0-rc.467):
+  /trpc-pokemon@2.0.0-next.0(@trpc/server@11.0.4):
     resolution: {integrity: sha512-TBcouSU77UyzYf9sh4JRrlS3iAsM7Q74G2l/Moxq64HFfwmqR4lvbVQMnb8TYE1n+WHKOPfX2EU4JZqK+CewlA==}
     peerDependencies:
       '@trpc/server': ^10.0.0-rc.4
     dependencies:
-      '@trpc/server': 11.0.0-rc.467
+      '@trpc/server': 11.0.4(typescript@5.4.5)
     dev: true
 
   /ts-api-utils@1.3.0(typescript@5.4.5):
