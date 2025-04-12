@@ -179,22 +179,19 @@ type DecorateProcedure<
   TClient,
 > = TProcedure extends AnyTRPCQueryProcedure
   ? {
-    atomWithQuery: QueryResolver<TProcedure, TClient>;
-  }
+      atomWithQuery: QueryResolver<TProcedure, TClient>;
+    }
   : TProcedure extends AnyTRPCMutationProcedure
     ? {
-      atomWithMutation: MutationResolver<TProcedure, TClient>;
-    }
+        atomWithMutation: MutationResolver<TProcedure, TClient>;
+      }
     : TProcedure extends AnyTRPCSubscriptionProcedure
       ? {
-        atomWithSubscription: SubscriptionResolver<TProcedure, TClient>;
-      }
+          atomWithSubscription: SubscriptionResolver<TProcedure, TClient>;
+        }
       : never;
 
-type DecoratedProcedureRecord<
-  TProcedures extends TRPCRouterRecord,
-  TClient,
-> = {
+type DecoratedProcedureRecord<TProcedures extends TRPCRouterRecord, TClient> = {
   [TKey in keyof TProcedures]: TProcedures[TKey] extends AnyTRPCRouter
     ? DecoratedProcedureRecord<TProcedures[TKey]['_def']['record'], TClient>
     : TProcedures[TKey] extends AnyTRPCProcedure
