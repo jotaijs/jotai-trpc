@@ -27,7 +27,9 @@ const NAMES = [
 
 const nameAtom = atom(NAMES[0] as string);
 
-const pokemonAtom = trpc.pokemon.byId.atomWithQuery((get: Getter) => get(nameAtom));
+const pokemonAtom = trpc.pokemon.byId.atomWithQuery((get: Getter) =>
+  get(nameAtom),
+);
 
 const Pokemon = () => {
   const [data] = useAtom(pokemonAtom);
