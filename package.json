@@ -70,7 +70,7 @@
     "eslint-plugin-react-compiler": "19.0.0-beta-decd7b8-20250118",
     "eslint-plugin-react-hooks": "5.2.0-canary-de1eaa26-20250124",
     "happy-dom": "^16.7.2",
-    "jotai": "^2.11.1",
+    "jotai": "^2.12.3",
     "jotai-trpc": "link:",
     "prettier": "^3.4.2",
     "react": "^19.0.0",
