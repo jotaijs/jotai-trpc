@@ -1,14 +1,12 @@
 import { Suspense } from 'react';
 import { useAtom } from 'jotai/react';
-import { atom, type Getter } from 'jotai/vanilla';
-import { createTRPCClient, httpLink } from '@trpc/client';
+import { atom } from 'jotai/vanilla';
+import { createTRPCProxyClient, httpLink } from '@trpc/client';
 import { createTRPCJotai } from 'jotai-trpc';
 import { trpcPokemonUrl } from 'trpc-pokemon';
 import type { PokemonRouter } from 'trpc-pokemon';
 import { ErrorBoundary } from 'react-error-boundary';
 import type { FallbackProps } from 'react-error-boundary';
-import type { inferRouterOutputs } from '@trpc/server';
-type Pokemon = inferRouterOutputs<PokemonRouter>['pokemon']['all'][number];
 
 const trpc = createTRPCJotai<PokemonRouter>({
   links: [
@@ -21,7 +19,7 @@ const trpc = createTRPCJotai<PokemonRouter>({
 const tokenAtom = atom('');
 
 const clientAtom = atom((get) =>
-  createTRPCClient<PokemonRouter>({
+  createTRPCProxyClient<PokemonRouter>({
     links: [
       httpLink({
         url: get(tokenAtom) ? trpcPokemonUrl : 'Invalid URL',
@@ -36,14 +34,14 @@ const clientAtom = atom((get) =>
 const pokemonAtom = trpc.pokemon.all.atomWithQuery(
   undefined,
   undefined,
-  (get: Getter) => get(clientAtom),
+  (get) => get(clientAtom),
 );
 
 const Pokemon = () => {
   const [data] = useAtom(pokemonAtom);
   return (
     <ul>
-      {data.map((item: Pokemon) => (
+      {data.map((item) => (
         <li key={item.id}>
           <div>ID: {item.id}</div>
           <div>Height: {item.height}</div>
