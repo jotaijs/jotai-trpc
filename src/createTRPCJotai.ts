@@ -1,13 +1,17 @@
-import { createTRPCProxyClient } from '@trpc/client';
-import type { TRPCRequestOptions, CreateTRPCClientOptions } from '@trpc/client';
+import {
+  createTRPCClient,
+  type TRPCProcedureOptions,
+  type TRPCRequestOptions,
+  type CreateTRPCClientOptions,
+} from '@trpc/client';
+
 import type {
-  AnyMutationProcedure,
-  AnyProcedure,
-  AnyQueryProcedure,
-  AnySubscriptionProcedure,
-  AnyRouter,
-  ProcedureArgs,
-  ProcedureRouterRecord,
+  AnyTRPCMutationProcedure,
+  AnyTRPCProcedure,
+  AnyTRPCQueryProcedure,
+  AnyTRPCSubscriptionProcedure,
+  AnyTRPCRouter,
+  TRPCRouterRecord,
   inferProcedureInput,
   inferProcedureOutput,
 } from '@trpc/server';
@@ -39,7 +43,7 @@ export const DISABLED = Symbol();
 
 type CustomOptions = { disabledOutput?: unknown };
 
-const atomWithQuery = <TProcedure extends AnyQueryProcedure, TClient>(
+const atomWithQuery = <TProcedure extends AnyTRPCQueryProcedure, TClient>(
   path: string[],
   getClient: (get: Getter) => TClient,
   getInput: AsyncValueOrGetter<
@@ -69,11 +73,11 @@ const atomWithQuery = <TProcedure extends AnyQueryProcedure, TClient>(
   return queryAtom;
 };
 
-const atomWithMutation = <TProcedure extends AnyMutationProcedure, TClient>(
+const atomWithMutation = <TProcedure extends AnyTRPCMutationProcedure, TClient>(
   path: string[],
   getClient: (get: Getter) => TClient,
 ) => {
-  type Args = ProcedureArgs<TProcedure['_def']>;
+  type Args = [inferProcedureInput<TProcedure>, TRPCProcedureOptions];
   type Output = inferProcedureOutput<TProcedure>;
   const mutationAtom = atom(
     null as Output | null,
@@ -88,7 +92,7 @@ const atomWithMutation = <TProcedure extends AnyMutationProcedure, TClient>(
 };
 
 const atomWithSubscription = <
-  TProcedure extends AnySubscriptionProcedure,
+  TProcedure extends AnyTRPCSubscriptionProcedure,
   TClient,
 >(
   path: string[],
@@ -122,18 +126,18 @@ const atomWithSubscription = <
   return subscriptionAtom;
 };
 
-type QueryResolver<TProcedure extends AnyProcedure, TClient> = {
+type QueryResolver<TProcedure extends AnyTRPCProcedure, TClient> = {
   (
-    getInput: AsyncValueOrGetter<ProcedureArgs<TProcedure['_def']>[0]>,
-    getOptions?: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
+    getInput: AsyncValueOrGetter<inferProcedureInput<TProcedure>>,
+    getOptions?: ValueOrGetter<TRPCProcedureOptions>,
     getClient?: (get: Getter) => TClient,
   ): WritableAtom<Promise<inferProcedureOutput<TProcedure>>, [], void>;
   (
     getInput: AsyncValueOrGetter<
-      ProcedureArgs<TProcedure['_def']>[0] | typeof DISABLED
+      inferProcedureInput<TProcedure> | typeof DISABLED
     >,
     getOptions?: ValueOrGetter<
-      ProcedureArgs<TProcedure['_def']>[1] & { disabledOutput?: undefined }
+      TRPCProcedureOptions & { disabledOutput?: undefined }
     >,
     getClient?: (get: Getter) => TClient,
   ): WritableAtom<
@@ -143,10 +147,10 @@ type QueryResolver<TProcedure extends AnyProcedure, TClient> = {
   >;
   <DisabledOutput>(
     getInput: AsyncValueOrGetter<
-      ProcedureArgs<TProcedure['_def']>[0] | typeof DISABLED
+      inferProcedureInput<TProcedure> | typeof DISABLED
     >,
     getOptions: ValueOrGetter<
-      ProcedureArgs<TProcedure['_def']>[1] & { disabledOutput: DisabledOutput }
+      TRPCProcedureOptions & { disabledOutput: DisabledOutput }
     >,
     getClient?: (get: Getter) => TClient,
   ): WritableAtom<
@@ -156,52 +160,49 @@ type QueryResolver<TProcedure extends AnyProcedure, TClient> = {
   >;
 };
 
-type MutationResolver<TProcedure extends AnyProcedure, TClient> = (
+type MutationResolver<TProcedure extends AnyTRPCProcedure, TClient> = (
   getClient?: (get: Getter) => TClient,
 ) => WritableAtom<
   inferProcedureOutput<TProcedure> | null,
-  [ProcedureArgs<TProcedure['_def']>],
+  [[inferProcedureInput<TProcedure>, TRPCProcedureOptions]],
   Promise<inferProcedureOutput<TProcedure>>
 >;
 
-type SubscriptionResolver<TProcedure extends AnyProcedure, TClient> = (
-  getInput: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[0]>,
-  getOptions?: ValueOrGetter<ProcedureArgs<TProcedure['_def']>[1]>,
+type SubscriptionResolver<TProcedure extends AnyTRPCProcedure, TClient> = (
+  getInput: ValueOrGetter<inferProcedureInput<TProcedure>>,
+  getOptions?: ValueOrGetter<TRPCProcedureOptions>,
   getClient?: (get: Getter) => TClient,
 ) => Atom<inferObservableValue<inferProcedureOutput<TProcedure>>>;
 
 type DecorateProcedure<
-  TProcedure extends AnyProcedure,
+  TProcedure extends AnyTRPCProcedure,
   TClient,
-> = TProcedure extends AnyQueryProcedure
+> = TProcedure extends AnyTRPCQueryProcedure
   ? {
       atomWithQuery: QueryResolver<TProcedure, TClient>;
     }
-  : TProcedure extends AnyMutationProcedure
+  : TProcedure extends AnyTRPCMutationProcedure
     ? {
         atomWithMutation: MutationResolver<TProcedure, TClient>;
       }
-    : TProcedure extends AnySubscriptionProcedure
+    : TProcedure extends AnyTRPCSubscriptionProcedure
       ? {
           atomWithSubscription: SubscriptionResolver<TProcedure, TClient>;
         }
       : never;
 
-type DecoratedProcedureRecord<
-  TProcedures extends ProcedureRouterRecord,
-  TClient,
-> = {
-  [TKey in keyof TProcedures]: TProcedures[TKey] extends AnyRouter
+type DecoratedProcedureRecord<TProcedures extends TRPCRouterRecord, TClient> = {
+  [TKey in keyof TProcedures]: TProcedures[TKey] extends AnyTRPCRouter
     ? DecoratedProcedureRecord<TProcedures[TKey]['_def']['record'], TClient>
-    : TProcedures[TKey] extends AnyProcedure
+    : TProcedures[TKey] extends AnyTRPCProcedure
       ? DecorateProcedure<TProcedures[TKey], TClient>
       : never;
 };
 
-export function createTRPCJotai<TRouter extends AnyRouter>(
+export function createTRPCJotai<TRouter extends AnyTRPCRouter>(
   opts: CreateTRPCClientOptions<TRouter>,
 ) {
-  const client = createTRPCProxyClient<TRouter>(opts);
+  const client = createTRPCClient<TRouter>(opts);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const createProxy = (target: any, path: readonly string[] = []): any => {

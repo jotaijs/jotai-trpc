@@ -57,8 +57,8 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",
-    "@trpc/client": "^10.45.2",
-    "@trpc/server": "^10.45.2",
+    "@trpc/client": "^11.1.0",
+    "@trpc/server": "^11.1.0",
     "@types/node": "^22.10.10",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
@@ -70,7 +70,7 @@
     "eslint-plugin-react-compiler": "19.0.0-beta-decd7b8-20250118",
     "eslint-plugin-react-hooks": "5.2.0-canary-de1eaa26-20250124",
     "happy-dom": "^16.7.2",
-    "jotai": "^2.11.1",
+    "jotai": "^2.12.2",
     "jotai-trpc": "link:",
     "prettier": "^3.4.2",
     "react": "^19.0.0",
@@ -85,8 +85,8 @@
     "vitest": "^3.0.4"
   },
   "peerDependencies": {
-    "@trpc/client": ">=10.0.0",
-    "@trpc/server": ">=10.0.0",
+    "@trpc/client": ">=11.0.0",
+    "@trpc/server": ">=11.0.0",
     "jotai": ">=2.0.0"
   }
 }
