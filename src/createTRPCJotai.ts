@@ -73,13 +73,13 @@ const atomWithMutation = <TProcedure extends AnyTRPCMutationProcedure, TClient>(
   path: string[],
   getClient: (get: Getter) => TClient,
 ) => {
-  type Args = inferProcedureInput<TProcedure>;
+  type Input = inferProcedureInput<TProcedure>;
   type Output = inferProcedureOutput<TProcedure>;
   const mutationAtom = atom(
     null as Output | null,
-    async (get, set, args: Args) => {
+    async (get, set, input: Input) => {
       const procedure = getProcedure(getClient(get), path);
-      const result: Output = await procedure.mutate(args);
+      const result: Output = await procedure.mutate(input);
       set(mutationAtom, result);
       return result;
     },
